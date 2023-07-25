@@ -149,3 +149,22 @@ sudo service nginx reload
 sudo nginx -t
 ```
 
+# Prepare the Django app
+
+Create the custom settings file at /your/app/folder/ptt/ptt/local_settings.py
+
+```
+DEBUG = False
+SECRET_KEY = "XXXXXXXXXXXXXXXXXXXxx"
+ALLOWED_HOSTS = ["your-domain.com"]
+```
+
+Prepare and restart the app
+
+```
+python manage.py collectstatic
+# prepare your custom database and ...
+python manage.py migrate
+# Restart the app to read the new custom settings
+sudo supervisorctl restart ptt
+```

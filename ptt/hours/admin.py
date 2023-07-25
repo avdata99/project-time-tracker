@@ -1,14 +1,21 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from hours.models import Hours
 
 
 @admin.register(Hours)
 class HoursAdmin(admin.ModelAdmin):
-    list_display = ('project', 'user', 'date', 'hours')
+    list_display = ('project', 'user', 'date', 'hours', 'notes', 'url_')
     search_fields = ('project__name', 'user__username', 'notes')
     date_hierarchy = 'date'
     ordering = ('-date',)
     readonly_fields = ['user']
+
+    def url_(self, obj):
+        if obj.url:
+            return mark_safe(f'<a target="_blank" href="{obj.url}">{obj.url}</a>')
+        else:
+            return ''
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)

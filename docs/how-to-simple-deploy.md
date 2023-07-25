@@ -157,6 +157,7 @@ Create the custom settings file at /your/app/folder/ptt/ptt/local_settings.py
 DEBUG = False
 SECRET_KEY = "XXXXXXXXXXXXXXXXXXXxx"
 ALLOWED_HOSTS = ["your-domain.com"]
+CSRF_TRUSTED_ORIGINS = ['your-domain.com']
 ```
 
 Prepare and restart the app
@@ -165,6 +166,13 @@ Prepare and restart the app
 python manage.py collectstatic
 # prepare your custom database and ...
 python manage.py migrate
+python manage createsuperuser
 # Restart the app to read the new custom settings
 sudo supervisorctl restart ptt
+```
+
+Add
+
+```
+sudo certbot --nginx
 ```

@@ -129,6 +129,8 @@ MEDIA_ROOT = "media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+CSRF_TRUSTED_ORIGINS = ['https://127.0.0.1']
+
 try:
     from .local_settings import *  # noqa F403
 except ImportError:

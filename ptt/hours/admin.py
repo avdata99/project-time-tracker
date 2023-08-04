@@ -1,4 +1,6 @@
+from typing import Any, List, Optional, Tuple, Union
 from django.contrib import admin
+from django.http.request import HttpRequest
 from django.utils.safestring import mark_safe
 from hours.models import Hours
 
@@ -9,7 +11,13 @@ class HoursAdmin(admin.ModelAdmin):
     search_fields = ('project__name', 'user__username', 'notes')
     date_hierarchy = 'date'
     ordering = ('-date',)
-    readonly_fields = ['user']
+
+    def get_readonly_fields(self, request, obj=None):
+        """ Only superuser can edit user """
+        if request.user.is_superuser:
+            return []
+        else:
+            return ['user']
 
     def url_(self, obj):
         if obj.url:
@@ -33,5 +41,6 @@ class HoursAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         """ force the user to be the logged user """
-        obj.user = request.user
+        if not request.user.is_superuser:
+            obj.user = request.user
         super().save_model(request, obj, form, change)

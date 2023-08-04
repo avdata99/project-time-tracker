@@ -21,6 +21,11 @@ class Pago(models.Model):
         max_digits=20,
         decimal_places=2,
     )
+    total_horas = models.DecimalField(
+        max_digits=20,
+        decimal_places=2,
+        default=0,
+    )
     pagado = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

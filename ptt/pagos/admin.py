@@ -5,12 +5,8 @@ from pagos.models import Pago
 @admin.register(Pago)
 class PagoAdmin(admin.ModelAdmin):
     list_display = (
-        'liquidacion',
-        'moneda',
-        'total',
-        'pagado',
-        'created',
-        'updated',
+        'liquidacion', 'moneda', 'total', 'pagado',
+        'total', 'total_horas', 'created', 'updated',
     )
     list_filter = (
         'moneda',

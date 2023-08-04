@@ -39,6 +39,7 @@ def liquidar_mes(liquidacion, raise_exception=True):
         liquidacion=liquidacion,
         moneda=valor_hora.moneda,
         total=total * valor_hora.valor_hora,
+        total_horas=total,
     )
     # Marcar todas las horas como liquidadas
     horas.update(liquidacion=liquidacion)

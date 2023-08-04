@@ -33,6 +33,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "projects",
     "hours",
+    "liquidaciones",
+    "pagos",
+    "usuarios",
 
     "django.contrib.admin",
     "django.contrib.auth",

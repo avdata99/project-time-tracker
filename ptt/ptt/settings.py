@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "liquidaciones",
     "pagos",
     "usuarios",
+    "adelantos",
 
     "django.contrib.admin",
     "django.contrib.auth",

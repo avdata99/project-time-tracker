@@ -29,17 +29,34 @@ def liquidar_mes(liquidacion, raise_exception=True):
     # TODO hacer un resumen de totales por proyecto
 
     # calcular total
-    total = horas.aggregate(models.Sum('hours'))['hours__sum']
+    total_horas = horas.aggregate(models.Sum('hours'))['hours__sum']
+    total_horas = round(total_horas, 2)
     valor_hora = ValorHoraUsuario.get_current_for_user(liquidacion.user)
+    total_pago = round(total_horas * valor_hora.valor_hora, 2)
     if not valor_hora:
         if raise_exception:
             raise Exception(f'No hay valor hora para {liquidacion.user}')
         return
+    notas = (
+        f'Total por horas: {total_horas} x '
+        f'{valor_hora.moneda} {valor_hora.valor_hora} '
+        f'= {total_pago}\n'
+    )
+    # ver los adelantos
+    adelantos = liquidacion.adelantos.all()
+    total_adelantos = adelantos.aggregate(models.Sum('total'))['total__sum']
+    if total_adelantos:
+        notas += f'Total adelantos: {total_adelantos}\n'
+        total_pago -= total_adelantos
+    else:
+        notas += 'Sin adelantos en esta liquidacion\n'
+
     pago = Pago.objects.create(
         liquidacion=liquidacion,
         moneda=valor_hora.moneda,
-        total=total * valor_hora.valor_hora,
-        total_horas=total,
+        total=total_pago,
+        total_horas=total_horas,
+        notas=notas,
     )
     # Marcar todas las horas como liquidadas
     horas.update(liquidacion=liquidacion)

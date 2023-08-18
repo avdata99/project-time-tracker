@@ -73,9 +73,15 @@ def resumen_liquidacion(liquidacion):
     # agrupar las horas por proyecto
     adelantos = liquidacion.adelantos.all()
     valor_hora = ValorHoraUsuario.get_current_for_user(liquidacion.user)
+
+    if adelantos.count() == 0:
+        total_adelantos = 0
+    else:
+        total_adelantos = adelantos.aggregate(models.Sum('total'))['total__sum'],
+
     proyectos = {
         'adelantos': adelantos,
-        'total_adelantos': adelantos.aggregate(models.Sum('total'))['total__sum'],
+        'total_adelantos': total_adelantos,
         'valor_hora': valor_hora,
         'total_horas': 0,
         'total_plata': 0,

@@ -77,7 +77,7 @@ def resumen_liquidacion(liquidacion):
     if adelantos.count() == 0:
         total_adelantos = 0
     else:
-        total_adelantos = adelantos.aggregate(models.Sum('total'))['total__sum'],
+        total_adelantos = adelantos.aggregate(models.Sum('total'))['total__sum']
 
     proyectos = {
         'adelantos': adelantos,

@@ -42,7 +42,9 @@ class Hours(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        Liquidacion.inicializar_mes(self)
+        liquidacion = Liquidacion.inicializar_mes(self)
+        self.liquidacion = liquidacion
+        self.save()
 
     class Meta:
         verbose_name_plural = 'horas'

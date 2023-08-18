@@ -51,6 +51,11 @@ class Liquidacion(models.Model):
         from liquidaciones.helpers import liquidar_mes
         return liquidar_mes(self, raise_exception=raise_exception)
 
+    @property
+    def resumen(self):
+        from liquidaciones.helpers import resumen_liquidacion
+        return resumen_liquidacion(self)
+
     class Meta:
         verbose_name_plural = 'liquidaciones'
         ordering = ('-anio', '-mes')

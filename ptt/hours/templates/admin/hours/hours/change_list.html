@@ -1,0 +1,52 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+  {{ block.super }}
+  <div id="admin-hours-extras">
+    <h2>Liquidaciones abiertas</h2>
+    {% for user_ in all_users %}
+    {% if user.id == user_.id or user.is_superuser %}
+    <p>
+      User: {{ user_ }}
+    </p>
+      {% for liq in user_.liquidaciones.all %}
+      {% if liq.abierto %}
+      <p>Liquidacion abierta:<b>{{ liq.anio }}-{{ liq.mes }}</b></p>
+      <p>
+        <ul>
+          {% with resumen=liq.resumen %}
+          <li>Total horas: {{ resumen.total_horas }}</li>
+          <li>Total $: {{ resumen.total_plata }}</li>
+          <li>Total adelantos $: {{ resumen.total_adelantos }}</li>
+          <li><b>Final a cobrar: $ {{ resumen.total_final }}</b></li>
+          <li>
+            Por projecto
+            <ul>
+              {% for proyecto_id,res in resumen.proyectos.items %}
+                  <li>Proyecto: 
+                    <b>{{ res.project.full_name }}</b>
+                    {{ res.total_horas }} horas,
+                    $: {{ res.total_plata }}
+                  </li>
+              {% endfor %}
+            </ul>
+          </li>
+          <li>
+            Adelantos ({{ resumen.adelantos|length }})
+            <ul>
+              {% for adelanto in resumen.adelantos %}
+                  <li> $ {{ adelanto.total }} ({{ adelanto.created }})</li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endwith %}
+        </ul>
+      </p>
+
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  {% endfor %}
+{% endblock %}

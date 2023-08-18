@@ -61,3 +61,46 @@ def liquidar_mes(liquidacion, raise_exception=True):
     # Marcar todas las horas como liquidadas
     horas.update(liquidacion=liquidacion)
     return pago
+
+
+def resumen_liquidacion(liquidacion):
+    """ Resumen de la liquidacion """
+    horas = Hours.objects.filter(
+        user=liquidacion.user,
+        date__year=liquidacion.anio,
+        date__month=liquidacion.mes,
+    )
+    # agrupar las horas por proyecto
+    adelantos = liquidacion.adelantos.all()
+    valor_hora = ValorHoraUsuario.get_current_for_user(liquidacion.user)
+    proyectos = {
+        'adelantos': adelantos,
+        'total_adelantos': adelantos.aggregate(models.Sum('total'))['total__sum'],
+        'valor_hora': valor_hora,
+        'total_horas': 0,
+        'total_plata': 0,
+        'proyectos': {},
+        'total_final': 0,
+    }
+
+    for hora in horas:
+        pid = f's-{hora.project.id}'
+        if pid not in proyectos['proyectos']:
+            proyectos['proyectos'][pid] = {
+                'name': hora.project.name,
+                'project': hora.project,
+                'horas': [],
+                'total_horas': 0,
+                'total_plata': 0,
+            }
+
+        ps = proyectos['proyectos'][pid]
+        ps['horas'].append(hora)
+        ps['total_horas'] += hora.hours
+        ps['total_plata'] += hora.hours * valor_hora.valor_hora
+        proyectos['total_horas'] += hora.hours
+        proyectos['total_plata'] += hora.hours * valor_hora.valor_hora
+
+    proyectos['total_final'] = proyectos['total_plata'] - proyectos['total_adelantos']
+
+    return proyectos

@@ -15,18 +15,18 @@
       <p>
         <ul>
           {% with resumen=liq.resumen %}
-          <li>Total horas: {{ resumen.total_horas }}</li>
-          <li>Total $: {{ resumen.total_plata }}</li>
-          <li>Total adelantos $: {{ resumen.total_adelantos }}</li>
-          <li><b>Final a cobrar: $ {{ resumen.total_final }}</b></li>
+          <li>Total horas: {{ resumen.total_horas|floatformat:2 }}</li>
+          <li>Total $: {{ resumen.total_plata|floatformat:2 }}</li>
+          <li>Total adelantos $: {{ resumen.total_adelantos|floatformat:2 }}</li>
+          <li><b>Final a cobrar: $ {{ resumen.total_final|floatformat:2 }}</b></li>
           <li>
             Por projecto
             <ul>
               {% for proyecto_id,res in resumen.proyectos.items %}
                   <li>Proyecto: 
                     <b>{{ res.project.full_name }}</b>
-                    {{ res.total_horas }} horas,
-                    $: {{ res.total_plata }}
+                    {{ res.total_horas|floatformat:2 }} horas,
+                    $: {{ res.total_plata|floatformat:2 }}
                   </li>
               {% endfor %}
             </ul>
@@ -35,7 +35,7 @@
             Adelantos ({{ resumen.adelantos|length }})
             <ul>
               {% for adelanto in resumen.adelantos %}
-                  <li> $ {{ adelanto.total }} ({{ adelanto.created }})</li>
+                  <li> $ {{ adelanto.total|floatformat:2 }} ({{ adelanto.created }})</li>
               {% endfor %}
             </ul>
           </li>

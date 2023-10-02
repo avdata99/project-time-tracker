@@ -63,7 +63,11 @@ class ValorHoraUsuario(models.Model):
     def get_current_for_user(cls, user):
         """ Devuelve el valor hora actual para un usuario especifico"""
         try:
-            valor_hora = cls.objects.filter(user=user).latest('desde')
+            valor_hora = cls.objects.filter(
+                user=user
+            ).order_by(
+                '-desde__anio', '-desde__mes'
+            )[0]
         except cls.DoesNotExist:
             logger.warning(f'No se encontró valor hora para {user.username}')
             return None

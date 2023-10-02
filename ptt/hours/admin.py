@@ -1,12 +1,12 @@
-from typing import Any, List, Optional, Tuple, Union
 from django.contrib import admin
-from django.http.request import HttpRequest
 from django.utils.safestring import mark_safe
+from hours.forms import HorasForm
 from hours.models import Hours
 
 
 @admin.register(Hours)
 class HoursAdmin(admin.ModelAdmin):
+    form = HorasForm
     list_display = ('project', 'user', 'date', 'hours', 'notes', 'url_')
     search_fields = ('project__name', 'user__username', 'notes')
     date_hierarchy = 'date'

@@ -31,6 +31,7 @@ def liquidar_mes(liquidacion, raise_exception=True):
     # calcular total
     total_horas = horas.aggregate(models.Sum('hours'))['hours__sum']
     total_horas = round(total_horas, 2)
+    # TODO deberia ser la liquidacion que le correspondia en el momento de esas horas
     valor_hora = ValorHoraUsuario.get_current_for_user(liquidacion.user)
     total_pago = round(total_horas * valor_hora.valor_hora, 2)
     if not valor_hora:
@@ -72,6 +73,7 @@ def resumen_liquidacion(liquidacion):
     )
     # agrupar las horas por proyecto
     adelantos = liquidacion.adelantos.all()
+    # TODO deberia ser la liquidacion que le correspondia en el momento de esas horas
     valor_hora = ValorHoraUsuario.get_current_for_user(liquidacion.user)
 
     if adelantos.count() == 0:

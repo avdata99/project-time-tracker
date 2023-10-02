@@ -33,7 +33,7 @@ class ProyectoUsuario(models.Model):
 
 class ValorHoraUsuario(models.Model):
     """ Sueldos de un programador en un período especifico """
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='valores_hora',
@@ -72,4 +72,4 @@ class ValorHoraUsuario(models.Model):
     class Meta:
         verbose_name_plural = 'valores hora de usuarios'
         unique_together = ('user', 'desde')
-        ordering = ('user', '-desde')
+        ordering = ('desde',)

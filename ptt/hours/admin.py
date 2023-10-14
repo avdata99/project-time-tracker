@@ -1,3 +1,4 @@
+from typing import Any
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from hours.forms import HorasForm
@@ -11,6 +12,12 @@ class HoursAdmin(admin.ModelAdmin):
     search_fields = ('project__name', 'user__username', 'notes')
     date_hierarchy = 'date'
     ordering = ('-date',)
+
+    # create the HorasForm with the request
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.request = request
+        return form
 
     def get_readonly_fields(self, request, obj=None):
         """ Only superuser can edit user """

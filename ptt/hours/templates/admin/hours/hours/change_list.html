@@ -9,43 +9,44 @@
 <div style="max-width: 400px; float:left;">
     <p><b>User: {{ user_ }}</b></p>
       {% for liq in user_.liquidaciones.all %}
-      {% if liq.abierto %}
-      <p>Liquidacion abierta:<b>{{ liq.anio }}-{{ liq.mes }}</b></p>
-      <p>
-        <ul>
-          {% with resumen=liq.resumen %}
-          <li>Total horas: {{ resumen.total_horas|floatformat:2 }}</li>
-          <li>Total $: {{ resumen.total_plata|floatformat:2 }}</li>
-          <li>Total adelantos $: {{ resumen.total_adelantos|floatformat:2 }}</li>
-          <li><b>Final a cobrar: $ {{ resumen.total_final|floatformat:2 }}</b></li>
-          <li>
-            Por projecto
+        {% if liq.abierto %}
+          <p>Liquidacion abierta:<b>{{ liq.anio }}-{{ liq.mes }}</b></p>
+          <div>
             <ul>
-              {% for proyecto_id,res in resumen.proyectos.items %}
-                  <li>Proyecto: 
-                    <b>{{ res.project.full_name }}</b>
-                    {{ res.total_horas|floatformat:2 }} horas,
-                    $: {{ res.total_plata|floatformat:2 }}
-                  </li>
-              {% endfor %}
+              {% with resumen=liq.resumen %}
+              <li>Total horas: {{ resumen.total_horas|floatformat:2 }}</li>
+              <li>Total $: {{ resumen.total_plata|floatformat:2 }}</li>
+              <li>Total adelantos $: {{ resumen.total_adelantos|floatformat:2 }}</li>
+              <li><b>Final a cobrar: $ {{ resumen.total_final|floatformat:2 }}</b></li>
+              <li>
+                Por projecto
+                <ul>
+                  {% for proyecto_id,res in resumen.proyectos.items %}
+                      <li>Proyecto: 
+                        <b>{{ res.project.full_name }}</b>
+                        {{ res.total_horas|floatformat:2 }} horas,
+                        $: {{ res.total_plata|floatformat:2 }}
+                      </li>
+                  {% endfor %}
+                </ul>
+              </li>
+              <li>
+                Adelantos ({{ resumen.adelantos|length }})
+                <ul>
+                  {% for adelanto in resumen.adelantos %}
+                      <li> $ {{ adelanto.total|floatformat:2 }} ({{ adelanto.created }})</li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endwith %}
             </ul>
-          </li>
-          <li>
-            Adelantos ({{ resumen.adelantos|length }})
-            <ul>
-              {% for adelanto in resumen.adelantos %}
-                  <li> $ {{ adelanto.total|floatformat:2 }} ({{ adelanto.created }})</li>
-              {% endfor %}
-            </ul>
-          </li>
-          {% endwith %}
-        </ul>
-      </p>
+          </div>
+        {% endif %}
+      {% endfor %}
 </div>
+
 {% endif %}
 {% endfor %}
 
-  </div>
-  {% endif %}
-  {% endfor %}
+</div>
 {% endblock %}

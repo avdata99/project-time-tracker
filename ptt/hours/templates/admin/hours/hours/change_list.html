@@ -4,11 +4,10 @@
   {{ block.super }}
   <div id="admin-hours-extras">
     <h2>Liquidaciones abiertas</h2>
-    {% for user_ in all_users %}
-    {% if user.id == user_.id or user.is_superuser %}
-    <p>
-      User: {{ user_ }}
-    </p>
+{% for user_ in all_users %}
+{% if user.id == user_.id or user.is_superuser %}
+<div style="max-width: 400px; float:left;">
+    <p><b>User: {{ user_ }}</b></p>
       {% for liq in user_.liquidaciones.all %}
       {% if liq.abierto %}
       <p>Liquidacion abierta:<b>{{ liq.anio }}-{{ liq.mes }}</b></p>
@@ -42,10 +41,10 @@
           {% endwith %}
         </ul>
       </p>
+</div>
+{% endif %}
+{% endfor %}
 
-      {% endif %}
-      {% endfor %}
-    </ul>
   </div>
   {% endif %}
   {% endfor %}

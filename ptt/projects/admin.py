@@ -11,3 +11,4 @@ class ProjectAdmin(admin.ModelAdmin):
 
     def full_name(self, obj):
         return obj.full_name
+    full_name.admin_order_field = 'name'

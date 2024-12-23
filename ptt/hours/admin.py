@@ -1,4 +1,3 @@
-from typing import Any
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from hours.forms import HorasForm
@@ -12,6 +11,7 @@ class HoursAdmin(admin.ModelAdmin):
     search_fields = ('project__name', 'user__username', 'notes')
     date_hierarchy = 'date'
     ordering = ('-date',)
+    list_per_page = 10
 
     # create the HorasForm with the request
     def get_form(self, request, obj=None, **kwargs):

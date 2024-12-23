@@ -9,15 +9,17 @@
 <div style="max-width: 400px; float:left;">
     <p><b>User: {{ user_ }}</b></p>
       {% for liq in user_.liquidaciones.all %}
-        {% if liq.abierto %}
-          <p>Liquidacion abierta:<b>{{ liq.anio }}-{{ liq.mes }}</b></p>
+        {% if liq.abierto or liq.is_last_n_months %}
+          <p>Liquidacion {% if liq.abierto %}abierta{% endif %}:<b>{{ liq.anio }}-{{ liq.mes }}</b></p>
           <div>
             <ul>
               {% with resumen=liq.resumen %}
               <li>Total horas: {{ resumen.total_horas|floatformat:2 }}</li>
               <li>Total $: {{ resumen.total_plata|floatformat:2 }}</li>
+              {% if liq.abierto %}
               <li>Total adelantos $: {{ resumen.total_adelantos|floatformat:2 }}</li>
               <li><b>Final a cobrar: $ {{ resumen.total_final|floatformat:2 }}</b></li>
+              {% endif %}
               <li>
                 Por projecto
                 <ul>
@@ -30,6 +32,7 @@
                   {% endfor %}
                 </ul>
               </li>
+              {% if liq.abierto %}
               <li>
                 Adelantos ({{ resumen.adelantos|length }})
                 <ul>
@@ -38,6 +41,7 @@
                   {% endfor %}
                 </ul>
               </li>
+              {% endif %}
               {% endwith %}
             </ul>
           </div>

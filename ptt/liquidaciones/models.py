@@ -1,6 +1,7 @@
 import logging
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 
 logger = logging.getLogger(__name__)
@@ -59,3 +60,10 @@ class Liquidacion(models.Model):
     class Meta:
         verbose_name_plural = 'liquidaciones'
         ordering = ('-anio', '-mes')
+
+    def is_last_n_months(self, months=3):
+        now = timezone.now()
+        last_n_months = now - timezone.timedelta(days=months * 30)
+        last_n_str = last_n_months.strftime('%Y-%m')
+        this_month = f'{self.anio}-{self.mes}'
+        return this_month >= last_n_str

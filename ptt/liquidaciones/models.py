@@ -65,5 +65,5 @@ class Liquidacion(models.Model):
         now = timezone.now()
         last_n_months = now - timezone.timedelta(days=months * 30)
         last_n_str = last_n_months.strftime('%Y-%m')
-        this_month = f'{self.anio}-{self.mes}'
+        this_month = f'{self.anio}-{self.mes:02}'
         return this_month >= last_n_str
